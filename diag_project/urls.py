@@ -6,20 +6,21 @@ from diag_app import views
 from django.views.generic import TemplateView
 
 
-router = routers.DefaultRouter()
+router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'accounts', views.UserView, 'list')
 router.register(r'systems', views.SystemViewSet)
 router.register(r'brands', views.BrandViewSet)
 router.register(r'models', views.ModelViewSet)
-router.register(r'get-problems', views.ProblemGetViewSet)
-router.register(r'post-problems', views.ProblemPostViewSet)
-router.register(r'get-solutions', views.SolutionGetViewSet)
-router.register(r'post-solutions', views.SolutionPostViewSet)
+router.register(r'problems', views.ProblemViewSet)
+# router.register(r'post-problems', views.ProblemPostViewSet)
+router.register(r'solutions', views.SolutionViewSet)
+# router.register(r'post-solutions', views.SolutionPostViewSet)
 router.register(r'votes', views.VoteViewSet)
-router.register(r'get-techs', views.TechGetViewSet)
-router.register(r'post-techs', views.TechPostViewSet)
+router.register(r'tech', views.TechViewSet)
+# router.register(r'post-techs', views.TechPostViewSet)
 router.register(r'ratings', views.RatingViewSet)
 router.register(r'notifications', views.NotificationViewSet)
+router.register(r'commits', views.CommitViewSet)
 
 
 urlpatterns = [

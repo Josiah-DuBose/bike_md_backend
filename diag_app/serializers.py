@@ -13,27 +13,26 @@ class SystemSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-
-    def create(self, validated_data):
-        user = User.objects.create(
-            username=validated_data['username'],
-            email=validated_data['email']
-            )
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+    # password = serializers.CharField(write_only=True)
+    #
+    # def create(self, validated_data):
+    #     user = User.objects.create(
+    #         username=validated_data['username'],
+    #         email=validated_data['email']
+    #         )
+    #     user.set_password(validated_data['password'])
+    #     user.save()
+    #     return user
 
     class Meta:
         model = User
         fields = ['id', 'password', 'email', 'username']
-        read_only_fields = ['is_staff', 'is_superuser', 'is_active',
-                            'date_joined',]
+        # read_only_fields = ['is_staff', 'is_superuser', 'is_active',
+        #                     'date_joined',]
 
 
 class TechGetSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-
+    # user = UserSerializer(many=False, read_only=True)
     class Meta:
         model = Tech
         fields = ['id', 'experience', 'job_title', 'shop', 'user',
@@ -64,15 +63,15 @@ class VoteSerializer(serializers.ModelSerializer):
 
 
 class SolutionGetSerializer(serializers.ModelSerializer):
-    votes = VoteSerializer(many=True, read_only=True)
-    commits = CommitSerializer(many=True, read_only=True)
-    tech = TechGetSerializer(many=False, read_only=True)
+    # votes = VoteSerializer(many=True, read_only=True)
+    # commits = CommitSerializer(many=True, read_only=True)
+    # tech = TechGetSerializer(many=False, read_only=True)
 
     class Meta:
         model = Solution
         fields = ['id', 'description', 'time_required', 'parts_cost',
-                  'problem', 'tech', 'posted', 'score', 'commits',
-                  'votes', 'url']
+                  'problem', 'tech', 'posted', 'score',
+                  'url']
 
 
 class SolutionPostSerializer(serializers.ModelSerializer):
@@ -84,14 +83,14 @@ class SolutionPostSerializer(serializers.ModelSerializer):
 
 
 class ProblemGetSerializer(serializers.ModelSerializer):
-    solutions = SolutionGetSerializer(many=True, read_only=True)
-    tech = TechGetSerializer(many=False, read_only=True)
-    system = SystemSerializer(many=False, read_only=True)
+    # solutions = SolutionGetSerializer(many=True, read_only=True)
+    # tech = TechGetSerializer(many=False, read_only=True)
+    # system = SystemSerializer(many=False, read_only=True)
 
     class Meta:
         model = Problem
         fields = ['id', 'title', 'system', 'description', 'tech',
-                  'model', 'posted', 'url', 'solutions']
+                  'model', 'posted', 'url']
 
 
 class ProblemPostSerializer(serializers.ModelSerializer):
@@ -117,7 +116,7 @@ class BrandSerializer(serializers.ModelSerializer):
 
 
 class ModelSerializer(serializers.ModelSerializer):
-    brand = BrandSerializer(many=False, read_only=True)
+    # brand = BrandSerializer(many=False, read_only=True)
 
     class Meta:
         model = Model
@@ -125,7 +124,7 @@ class ModelSerializer(serializers.ModelSerializer):
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Notification
         fields = ['id', 'tech', 'message', 'posted', 'solution', 'commit']

@@ -8,6 +8,5 @@ scrap.py
 .map
 .css.map
 style.css.map
-settings.py
 development_photos
 Procfile

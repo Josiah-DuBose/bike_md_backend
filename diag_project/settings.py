@@ -11,7 +11,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1',  'pacific-depths-50874.herokuapp.com',
-                 'bike-md.herokuapp.com']
+                 'bike-md.herokuapp.com', 'localhost']
 
 INSTALLED_APPS = [
     'diag_app.apps.DiagAppConfig',
@@ -22,13 +22,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_json_api',
+    'rest_framework.authtoken',
     'crispy_forms',
-
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -39,9 +42,24 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'diag_project.urls'
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
-    'PAGE_SIZE': 500,
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'PAGE_SIZE': 10,
+    'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework_json_api.pagination.PageNumberPagination',
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework_json_api.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework_json_api.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
+    'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
 }
 
 TEMPLATES = [
@@ -76,8 +94,8 @@ DATABASES = {
 
 db_from_env = dj_database_url.config(conn_max_age=500)
 
+### Needed for deployment to heroku.###
 # DATABASES['default'].update(db_from_env)
-#
 # DATABASES['default'] = dj_database_url.config()
 
 
@@ -107,6 +125,9 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+#turn off in prod
+CORS_ORIGIN_ALLOW_ALL = True
 
 STATIC_URL = '/static/'
 
