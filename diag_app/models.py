@@ -1,14 +1,32 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+
+
+# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+# def create_auth_token(sender, instance=None, created=False, **kwargs):
+#     if created:
+#         Token.objects.create(user=instance)
 
 
 class Tech(models.Model):
     experience = models.IntegerField(default=0)
     job_title = models.CharField(max_length=25)
     shop = models.CharField(max_length=25)
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     tech_rating = models.IntegerField(default=0)
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.profile.save()
 
     class JSONAPIMeta:
         resource_name = "techs"
@@ -22,26 +40,9 @@ class Rating(models.Model):
         resource_name = "ratings"
 
 
-class System(models.Model):
-    name = models.CharField(max_length=25)
-
-    class JSONAPIMeta:
-        resource_name = "systems"
-
-
-class Brand(models.Model):
-    name = models.CharField(max_length=25)
-
-    class JSONAPIMeta:
-        resource_name = "brands"
-
-    def __repr__(self):
-        return str(self.name)
-
-
 class Model(models.Model):
     name = models.CharField(max_length=40)
-    brand = models.ForeignKey(Brand)
+    brand = models.CharField(max_length=15)
     year = models.IntegerField(default=0)
 
     class JSONAPIMeta:
@@ -53,7 +54,7 @@ class Model(models.Model):
 
 class Problem(models.Model):
     title = models.CharField(max_length=65)
-    system = models.ForeignKey(System)
+    system = models.CharField(max_length=20)
     description = models.TextField(max_length=500)
     tech = models.ForeignKey(Tech)
     model = models.ForeignKey(Model)
@@ -105,8 +106,3 @@ class Vote(models.Model):
 
     class JSONAPIMeta:
         resource_name = "votes"
-
-
-class Problem_Model(models.Model):
-    problem = models.ForeignKey(Problem)
-    model = models.ForeignKey(Model)

@@ -46,7 +46,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
-    'PAGE_SIZE': 10,
+    'PAGE_SIZE': 1000,
     'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework_json_api.pagination.PageNumberPagination',
@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'diag_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'BIKEmD',
+        'NAME': 'BMD',
         'USER': '',
         'PASSWORD': '',
         'HOST': 'localhost',
