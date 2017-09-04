@@ -6,27 +6,21 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 
-# @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-# def create_auth_token(sender, instance=None, created=False, **kwargs):
-#     if created:
-#         Token.objects.create(user=instance)
-
-
 class Tech(models.Model):
     experience = models.IntegerField(default=0)
-    job_title = models.CharField(max_length=25)
-    shop = models.CharField(max_length=25)
+    job_title = models.CharField(null=True, max_length=25)
+    shop = models.CharField(null=True, max_length=25)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     tech_rating = models.IntegerField(default=0)
 
     @receiver(post_save, sender=User)
-    def create_user_profile(sender, instance, created, **kwargs):
+    def create_tech_profile(sender, instance, created, **kwargs):
         if created:
-            Profile.objects.create(user=instance)
+            Tech.objects.create(user=instance)
 
     @receiver(post_save, sender=User)
-    def save_user_profile(sender, instance, **kwargs):
-        instance.profile.save()
+    def save_tech_profile(sender, instance, **kwargs):
+        instance.tech.save()
 
     class JSONAPIMeta:
         resource_name = "techs"
