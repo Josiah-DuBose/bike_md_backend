@@ -1,6 +1,8 @@
 from .models import Vote, Problem, Solution, Tech, Rating, Model, Commit, Notification
 from django.contrib.auth.models import User
-from rest_framework import serializers
+from rest_framework_json_api import serializers
+from rest_framework_json_api.relations import ResourceRelatedField
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -42,12 +44,19 @@ class SolutionSerializer(serializers.ModelSerializer):
 
 
 class ProblemSerializer(serializers.ModelSerializer):
+    # solutions = SolutionSerializer(many=True, read_only=True)
+    included_serializers = {
+        "solutions": SolutionSerializer,
+    }
 
     class Meta:
         model = Problem
         fields = ['id', 'title', 'system', 'description', 'tech',
-                  'model', 'posted', 'url']
+                  'model', 'posted', 'url', 'solutions']
 
+
+    class JSONAPIMeta:
+        included_resources = ['solutions']
 
 class RatingSerializer(serializers.ModelSerializer):
 

@@ -62,7 +62,7 @@ class Solution(models.Model):
     description = models.TextField(max_length=500)
     time_required = models.FloatField(default=0)
     parts_cost = models.DecimalField(max_digits=6, decimal_places=2)
-    problem = models.ForeignKey(Problem)
+    problem = models.ForeignKey(Problem, related_name='solutions')
     tech = models.ForeignKey(Tech)
     posted = models.DateTimeField(auto_now=True)
     score = models.IntegerField(default=0)
@@ -84,7 +84,6 @@ class Commit(models.Model):
 class Notification(models.Model):
     tech = models.ForeignKey(Tech)
     message = models.CharField(max_length=20)
-    # is this the best way to link notifications to events?
     solution = models.ForeignKey(Solution, null=True)
     commit = models.ForeignKey(Commit, null=True)
     posted = models.DateTimeField(auto_now=True)
