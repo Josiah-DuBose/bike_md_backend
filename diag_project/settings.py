@@ -43,8 +43,9 @@ ROOT_URLCONF = 'diag_project.urls'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
     'PAGE_SIZE': 1000,
     'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
@@ -52,6 +53,7 @@ REST_FRAMEWORK = {
         'rest_framework_json_api.pagination.PageNumberPagination',
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework_json_api.parsers.JSONParser',
+        'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser'
     ),

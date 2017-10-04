@@ -6,18 +6,24 @@ from rest_framework_json_api.relations import ResourceRelatedField
 
 
 class UserSerializer(serializers.ModelSerializer):
-
+    many = True
     class Meta:
         model = User
         fields = ['id', 'password', 'email', 'username']
 
 
-class TechSerializer(serializers.ModelSerializer):
+class TechSerializer(serializers.ModelSerializer): 
+    included_serializers = {
+        "user": UserSerializer,
+    }
 
     class Meta:
         model = Tech
         fields = ['id', 'experience', 'job_title', 'shop', 'user',
                   'tech_rating']
+
+    class JSONAPIMeta:
+        included_resources = ['user']
 
 
 class CommitSerializer(serializers.ModelSerializer):
@@ -44,7 +50,6 @@ class SolutionSerializer(serializers.ModelSerializer):
 
 
 class ProblemSerializer(serializers.ModelSerializer):
-    # solutions = SolutionSerializer(many=True, read_only=True)
     included_serializers = {
         "solutions": SolutionSerializer,
     }
@@ -66,10 +71,16 @@ class RatingSerializer(serializers.ModelSerializer):
 
 
 class ModelSerializer(serializers.ModelSerializer):
+    included_serializers = {
+        "problems": ProblemSerializer,
+    }
 
     class Meta:
         model = Model
-        fields = ['id', 'name', 'brand', 'year', 'url']
+        fields = ['id', 'name', 'brand', 'year', 'url', 'problems']
+
+    class JSONAPIMeta:
+        included_resources = ['problems']
 
 
 class NotificationSerializer(serializers.ModelSerializer):

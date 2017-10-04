@@ -10,7 +10,7 @@ class Tech(models.Model):
     experience = models.IntegerField(default=0)
     job_title = models.CharField(null=True, max_length=25)
     shop = models.CharField(null=True, max_length=25)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='tech')
     tech_rating = models.IntegerField(default=0)
 
     @receiver(post_save, sender=User)
@@ -51,7 +51,7 @@ class Problem(models.Model):
     system = models.CharField(max_length=20)
     description = models.TextField(max_length=500)
     tech = models.ForeignKey(Tech)
-    model = models.ForeignKey(Model)
+    model = models.ForeignKey(Model, related_name='problems')
     posted = models.DateTimeField(auto_now=True)
 
     class JSONAPIMeta:

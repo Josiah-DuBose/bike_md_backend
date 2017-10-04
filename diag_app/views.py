@@ -1,10 +1,21 @@
 from rest_framework import viewsets, permissions, generics, filters
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from . import models
 from .models import Vote, Problem, Solution, Tech, Rating, Model, Commit, Notification
 from .serializers import VoteSerializer, UserSerializer, RatingSerializer
 from .serializers import ModelSerializer, SolutionSerializer, CommitSerializer
 from .serializers import TechSerializer, NotificationSerializer, ProblemSerializer
 from django.contrib.auth.models import User
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import api_view, renderer_classes
+from .forms import LoginForm
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.http import JsonResponse
 
 
 # class viewsets
@@ -12,7 +23,6 @@ class UserView(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     model = User
-
 
 class ModelViewSet(viewsets.ModelViewSet):
     queryset = Model.objects.all().order_by('name')
@@ -72,3 +82,16 @@ def create_user(request):
         'user_form': user_form,
         'profile_form': profile_form
     })
+
+def login_user(request):
+    form = LoginForm(request.POST or None)
+    if request.POST:
+        user = authenticate(username = request.POST['username'],
+        password = request.POST['password'])
+        if user is not None and user.is_active and form.is_valid():
+            login(request, user)
+            return HttpResponseRedirect('/')
+        else:
+            return render(request, 'registration/login.html',{
+                'login_message' : 'Enter the username and password correctly',})
+    return render(request, 'registration/login.html')
