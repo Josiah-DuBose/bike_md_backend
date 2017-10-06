@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'password', 'email', 'username']
 
 
-class TechSerializer(serializers.ModelSerializer): 
+class TechSerializer(serializers.ModelSerializer):
     included_serializers = {
         "user": UserSerializer,
     }
@@ -52,6 +52,8 @@ class SolutionSerializer(serializers.ModelSerializer):
 class ProblemSerializer(serializers.ModelSerializer):
     included_serializers = {
         "solutions": SolutionSerializer,
+        "tech": TechSerializer,
+        "model": ModelSerializer
     }
 
     class Meta:
@@ -61,7 +63,7 @@ class ProblemSerializer(serializers.ModelSerializer):
 
 
     class JSONAPIMeta:
-        included_resources = ['solutions']
+        included_resources = ['solutions', 'tech', 'model']
 
 class RatingSerializer(serializers.ModelSerializer):
 
