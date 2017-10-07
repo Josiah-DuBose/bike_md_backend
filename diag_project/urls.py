@@ -6,6 +6,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from diag_app import views
 from django.views.generic import TemplateView
 from rest_framework_jwt.views import refresh_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token
 
 
 router = routers.DefaultRouter(trailing_slash=False)

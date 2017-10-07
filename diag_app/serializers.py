@@ -49,6 +49,19 @@ class SolutionSerializer(serializers.ModelSerializer):
                   'url']
 
 
+class ModelSerializer(serializers.ModelSerializer):
+    # included_serializers = {
+    #     "problems": ProblemSerializer,
+    # }
+
+    class Meta:
+        model = Model
+        fields = ['id', 'name', 'brand', 'year', 'url']
+
+    # class JSONAPIMeta:
+    #     included_resources = ['problems']
+
+
 class ProblemSerializer(serializers.ModelSerializer):
     included_serializers = {
         "solutions": SolutionSerializer,
