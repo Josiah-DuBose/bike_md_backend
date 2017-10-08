@@ -16,6 +16,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http import JsonResponse
+import django_filters
 
 
 # class viewsets
@@ -37,6 +38,12 @@ class ProblemViewSet(viewsets.ModelViewSet):
 class SolutionViewSet(viewsets.ModelViewSet):
     queryset = Solution.objects.all()
     serializer_class = SolutionSerializer
+
+class SolutionFilter(django_filters.rest_framework.FilterSet):
+
+    class Meta:
+        model = Solution
+        fields = ['problem']
 
 
 class VoteViewSet(viewsets.ModelViewSet):
