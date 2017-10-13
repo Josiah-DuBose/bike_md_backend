@@ -10,7 +10,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'accounts', views.UserView, 'list')
+router.register(r'user', views.UserView, 'list')
 router.register(r'model', views.ModelViewSet)
 router.register(r'problem', views.ProblemViewSet)
 router.register(r'solution', views.SolutionViewSet)
@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^api-auth-token/', obtain_auth_token),
     url(r'^api-token-refresh/', refresh_jwt_token),
     url(r'^api-token-auth/', obtain_jwt_token),
+    # url(r'^api-register/', register),
     # url(r'^', include('diag_app.urls', namespace='api', app_name='diag_app')),
     # url(r'^admin/', admin.site.urls),
     # url(r'^login/$', views.login_user, name='login'),

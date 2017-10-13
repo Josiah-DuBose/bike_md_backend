@@ -25,6 +25,23 @@ class UserView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     model = User
 
+# def register(request):
+#     try:
+#         payload = (request.body)
+#     except ValueError:
+#         return JsonResponse({"error": "Unable to parse request"}, status=400)
+#
+#     form = RegistrationForm(payload)
+#     if form.is_valid():
+#         user = user.objects.create_user(
+#             form.cleaned_data["username"],
+#             form.cleaned_data["email"],
+#             form.cleaned_data["password"]
+#         )
+#         user.save()
+#         return JsonResponse({"success": "User registered."}, status=201)
+#     return HttpResponse(form.errors.as_json(), status=400, content_type="application/json")
+
 class ModelViewSet(viewsets.ModelViewSet):
     queryset = Model.objects.all().order_by('name')
     serializer_class = ModelSerializer

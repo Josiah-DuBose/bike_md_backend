@@ -6,7 +6,6 @@ from rest_framework_json_api.relations import ResourceRelatedField
 
 
 class UserSerializer(serializers.ModelSerializer):
-    many = True
     class Meta:
         model = User
         fields = ['id', 'password', 'email', 'username']
