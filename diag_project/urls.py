@@ -23,13 +23,6 @@ router.register(r'commit', views.CommitViewSet)
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),
-    url(r'^api-auth-token/', obtain_auth_token),
     url(r'^api-token-refresh/', refresh_jwt_token),
     url(r'^api-token-auth/', obtain_jwt_token),
-    # url(r'^api-register/', register),
-    # url(r'^', include('diag_app.urls', namespace='api', app_name='diag_app')),
-    # url(r'^admin/', admin.site.urls),
-    # url(r'^login/$', views.login_user, name='login'),
-    # url(r'^logout/$', auth_views.logout, {'next_page': 'login'},
-    #     name='logout'),
 ]

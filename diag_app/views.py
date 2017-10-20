@@ -26,7 +26,7 @@ class ProblemFilter(filters.FilterSet):
 
     class Meta:
         model = Problem
-        fields = ['posted', 'posted_gte']
+        fields = ['posted', 'posted_gte', 'tech']
 
 
 class ProblemViewSet(viewsets.ModelViewSet):
@@ -39,7 +39,7 @@ class SolutionFilter(filters.FilterSet):
 
     class Meta:
         model = Solution
-        fields = ['problem']
+        fields = ['problem', 'tech']
 
 
 class SolutionViewSet(viewsets.ModelViewSet):
