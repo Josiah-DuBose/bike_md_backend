@@ -27,14 +27,6 @@ class Tech(models.Model):
         resource_name = "techs"
 
 
-class Rating(models.Model):
-    tech = models.ForeignKey(Tech)
-    value = models.IntegerField(default=5)
-
-    class JSONAPIMeta:
-        resource_name = "ratings"
-
-
 class Model(models.Model):
     name = models.CharField(max_length=40)
     brand = models.CharField(max_length=15)
@@ -54,6 +46,7 @@ class Problem(models.Model):
     tech = models.ForeignKey(Tech)
     model = models.ForeignKey(Model, related_name='problems')
     posted = models.DateTimeField(auto_now=True)
+    mileage = models.IntegerField(default=0)
 
     class JSONAPIMeta:
         resource_name = "problems"
@@ -76,7 +69,7 @@ class Commit(models.Model):
     solution = models.ForeignKey(Solution)
     tech = models.ForeignKey(Tech)
     posted = models.DateTimeField(auto_now=True)
-    text = models.TextField(max_length=200)
+    text = models.TextField(max_length=500)
 
     class JSONAPIMeta:
         resource_name = "commits"
@@ -91,12 +84,3 @@ class Notification(models.Model):
 
     class JSONAPIMeta:
         resource_name = "notifications"
-
-
-class Vote(models.Model):
-    tech = models.ForeignKey(Tech)
-    solution = models.ForeignKey(Solution)
-    value = models.IntegerField(default=1)
-
-    class JSONAPIMeta:
-        resource_name = "votes"

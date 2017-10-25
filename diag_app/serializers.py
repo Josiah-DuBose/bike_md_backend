@@ -1,4 +1,4 @@
-from .models import Vote, Problem, Solution, Tech, Rating, Model, Commit, Notification
+from .models import Problem, Solution, Tech, Model, Commit, Notification
 from django.contrib.auth.models import User
 from rest_framework_json_api import serializers
 from rest_framework_json_api.relations import ResourceRelatedField
@@ -49,12 +49,6 @@ class CommitSerializer(serializers.ModelSerializer):
         fields = ['id', 'solution', 'tech', 'posted', 'text', 'url']
 
 
-class VoteSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Vote
-        fields = "__all__"
-
 
 class SolutionSerializer(serializers.ModelSerializer):
 
@@ -73,18 +67,11 @@ class ProblemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Problem
         fields = ['id', 'title', 'system', 'description', 'tech',
-                  'model', 'posted', 'url']
+                  'model', 'posted', 'mileage', 'url']
 
 
     class JSONAPIMeta:
         included_resources = ['tech']
-
-
-class RatingSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Rating
-        fields = "__all__"
 
 
 class ModelSerializer(serializers.ModelSerializer):
