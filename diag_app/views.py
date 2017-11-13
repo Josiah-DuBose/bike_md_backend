@@ -45,7 +45,7 @@ class SolutionFilter(django_filters.rest_framework.FilterSet):
 
 
 class SolutionViewSet(viewsets.ModelViewSet):
-    queryset = Solution.objects.all()
+    queryset = Solution.objects.all().order_by('-score')
     serializer_class = SolutionSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
     filter_class = SolutionFilter

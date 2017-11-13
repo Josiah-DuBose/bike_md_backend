@@ -49,7 +49,6 @@ class CommitSerializer(serializers.ModelSerializer):
         fields = ['id', 'solution', 'tech', 'posted', 'text', 'url']
 
 
-
 class SolutionSerializer(serializers.ModelSerializer):
 
     class Meta:
