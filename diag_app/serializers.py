@@ -1,8 +1,6 @@
 from .models import Problem, Solution, Tech, Model, Commit, Notification
 from django.contrib.auth.models import User
-from rest_framework_json_api import serializers
-from rest_framework_json_api.relations import ResourceRelatedField
-
+from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):

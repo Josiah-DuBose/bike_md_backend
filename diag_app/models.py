@@ -27,10 +27,18 @@ class Tech(models.Model):
         resource_name = "techs"
 
 
+class Brand(models.Model):
+    value = models.CharField(max_length=40)
+
+
+class Year(models.Model):
+    value = models.CharField(max_length=4)
+
+
 class Model(models.Model):
     name = models.CharField(max_length=40)
-    brand = models.CharField(max_length=15)
-    year = models.IntegerField(default=0)
+    brand = models.ForeignKey(Brand)
+    year = models.ForeignKey(Year)
 
     class JSONAPIMeta:
         resource_name = "models"
