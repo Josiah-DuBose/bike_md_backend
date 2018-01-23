@@ -10,13 +10,15 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 
 router = routers.DefaultRouter(trailing_slash=False)
-router.register(r'user', views.UserView, 'list')
-router.register(r'model', views.ModelViewSet)
-router.register(r'problem', views.ProblemViewSet)
-router.register(r'solution', views.SolutionViewSet)
-router.register(r'tech', views.TechViewSet)
-router.register(r'notification', views.NotificationViewSet)
-router.register(r'commit', views.CommitViewSet)
+router.register(r'users', views.UserView, 'list')
+router.register(r'models', views.ModelViewSet)
+router.register(r'problems', views.ProblemViewSet)
+router.register(r'solutions', views.SolutionViewSet)
+router.register(r'techs', views.TechViewSet)
+router.register(r'notifications', views.NotificationViewSet)
+router.register(r'commits', views.CommitViewSet)
+router.register(r'brands', views.BrandViewSet)
+router.register(r'years', views.YearViewSet)
 
 
 urlpatterns = [

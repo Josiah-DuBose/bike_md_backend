@@ -1,9 +1,9 @@
 from rest_framework import viewsets, permissions, generics, filters
 from . import models
-from .models import Problem, Solution, Tech, Model, Commit, Notification
+from .models import Problem, Solution, Tech, Model, Commit, Notification, Year, Brand
 from .serializers import UserSerializer, CommitSerializer, ProblemSerializer
-from .serializers import ModelSerializer, SolutionSerializer
-from .serializers import TechSerializer, NotificationSerializer
+from .serializers import ModelSerializer, SolutionSerializer, YearSerializer
+from .serializers import TechSerializer, NotificationSerializer, BrandSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 import django_filters
@@ -19,6 +19,16 @@ class UserView(viewsets.ModelViewSet):
 class ModelViewSet(viewsets.ModelViewSet):
     queryset = Model.objects.all().order_by('name')
     serializer_class = ModelSerializer
+
+
+class YearViewSet(viewsets.ModelViewSet):
+    queryset = Year.objects.all().order_by('value')
+    serializer_class = YearSerializer
+
+
+class BrandViewSet(viewsets.ModelViewSet):
+    queryset = Brand.objects.all().order_by('value')
+    serializer_class = BrandSerializer
 
 
 class ProblemFilter(django_filters.rest_framework.FilterSet):

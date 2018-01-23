@@ -1,4 +1,4 @@
-from .models import Problem, Solution, Tech, Model, Commit, Notification
+from .models import Problem, Solution, Tech, Model, Commit, Notification, Brand, Year
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -69,6 +69,21 @@ class ProblemSerializer(serializers.ModelSerializer):
 
     class JSONAPIMeta:
         included_resources = ['tech']
+
+
+class BrandSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Brand
+        fields = ['id', 'value']
+
+
+class YearSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Year
+        fields = ['id', 'value']
+
 
 
 class ModelSerializer(serializers.ModelSerializer):
