@@ -28,7 +28,7 @@ sub map_model_names {
             $values[0] = ($model_map{$key});
         }
         print(Dumper(\@values));
-        print OUTPUT "@values";
+         print OUTPUT join(",", "@values");
     }
 }
 
@@ -62,8 +62,8 @@ sub map_years {
             print(Dumper($year_map{$key}));
             $values[2] = ($year_map{$key});
         }
-        # print(Dumper(\@values));
-        print OUTPUT "@values";
+        print(Dumper(\@values));
+        print OUTPUT join(",", @values), "\n";
     }
 
     1;
@@ -71,7 +71,7 @@ sub map_years {
 }
 
 eval {
-    # map_model_names();
+    map_model_names();
     map_years();
 
 }
