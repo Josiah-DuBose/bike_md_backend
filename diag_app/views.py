@@ -16,9 +16,18 @@ class UserView(viewsets.ModelViewSet):
     model = User
 
 
+class ModelFilter(django_filters.rest_framework.FilterSet):
+
+    class Meta:
+        model = Model
+        fields = ['brand', 'year']
+
+
 class ModelViewSet(viewsets.ModelViewSet):
     queryset = Model.objects.all().order_by('name')
     serializer_class = ModelSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,filters.SearchFilter,)
+    filter_class = ModelFilter
 
 
 class YearViewSet(viewsets.ModelViewSet):
