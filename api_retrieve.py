@@ -16,16 +16,23 @@ baseURLmodels = "https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeIdYear/
 # makeId/474/modelyear/2015/vehicleType/Motorcycle?format=json
 URLmakes = "https://vpic.nhtsa.dot.gov/api/vehicles/GetMakesForVehicleType/Motorcycle?format=json"
 
+cur.execute("SELECT * FROM diag_app_brand;")
+print(cur.fetchall())
 
 
-#Retrieve makes and store them in a list.
+
+#Retrieve makes and store them in the DB.
 all_makes = requests.get(URLmakes)
 make_response_array = all_makes.json()["Results"]
-makes = []
 
+# cur.execute("""TRUNCATE TABLE diag_app_model RESTART IDENTITY CASCADE;""")
 for make in make_response_array:
-    makes.append(make["MakeName"])
-
-makes.sort()
-# print(makes)
+    name = make["MakeName"]
+    sql = """INSERT INTO diag_app_brand (name) VALUES ('%s');""" % name
+    try:
+        cur.execute(sql)
+    except psycopg2.Error as e:
+        print(e.pgerror)
+        
+    conn.commit()
 
