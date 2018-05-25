@@ -1,7 +1,7 @@
 import requests
 import json
 import psycopg2
-
+import re
 
 def dbConnect():
     # DB connect and cursor.
@@ -36,6 +36,14 @@ def tableCleanUp(**args):
     conn.commit()
 
 
+def updateModels(brands):
+    ###Retrieve models and store them in the DB###
+
+    #DB connect and cursor creation
+    conn = dbConnect()
+    cur = conn.cursor()
+
+
 def updateMakes():
     ###Retrieve makes and store them in the DB###
 
@@ -46,22 +54,38 @@ def updateMakes():
     #Call external API for current make data
     all_makes = requests.get(getURLs(action="makes"))
     make_response_array = all_makes.json()["Results"]
-    print(make_response_array)
 
     #DB house keeping
     tableCleanUp(conn=conn, name="diag_app_brand")
+
+    #Makes array for call to get models
+    makes = []
 
     #Perform insert for each Make retrieved from API
     for make in make_response_array:
         name = make["MakeName"]
         makeID = make["MakeId"]
-        sql = """INSERT INTO diag_app_brand (name, make_id) VALUES ('{}', '{}');""".format(name, makeID)
+
+        #Clean up name
+        clean_name = re.sub('\'', '', name)
+        
+        #If we get a really name move on to the next iteration 
+        if (len(clean_name) > 15):
+            continue
+
+        #Build statement and insert 
+        sql = """INSERT INTO diag_app_brand (name, make_id) VALUES ('{}', '{}');""".format(clean_name, makeID)
         try:
             cur.execute(sql)
+            # Add make to makes array
+            makes.append({"brand": clean_name, "id": makeID})
         except psycopg2.Error as e:
             print(e.pgerror)
         conn.commit()
     
+    #Update models for the brands retrieved
+    updateModels(makes)
+
     #Close cursor and DB connection 
     cur.close()
     conn.close()
