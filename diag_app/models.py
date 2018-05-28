@@ -28,7 +28,8 @@ class Tech(models.Model):
 
 
 class Brand(models.Model):
-    value = models.CharField(max_length=40)
+    name = models.CharField(max_length=40)
+    make_id = models.CharField(max_length=40)
 
 
 class Year(models.Model):
