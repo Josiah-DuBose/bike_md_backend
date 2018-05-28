@@ -3,6 +3,12 @@ import json
 import psycopg2
 import re
 
+###
+# Retrieve all brands and models from https://vpic.nhtsa.dot.gov/api/
+# and insert in the database. Will delete any brands that do not currently 
+# have models, or do no meet the name requirements.
+###
+
 def dbConnect():
     # Return DB connection and cursor.
     try:
@@ -39,6 +45,18 @@ def tableCleanUp(name):
     conn.commit()
 
 
+def cleanUpBrands(makes):
+    #DB connect and cursor creation
+    conn, cur = dbConnect()
+
+    #Remove unneeded brands from DB.
+    for make in makes:
+        sql = """DELETE FROM diag_app_brand WHERE name='{}';""".format(make)
+        print("delete", sql)
+        cur.execute(sql)
+        conn.commit()
+
+
 def updateModels():
     ###Retrieve models and store them in the DB###
 
@@ -57,6 +75,7 @@ def updateModels():
     makes = cur.fetchall()
 
     baseURL = getURL("models")
+    brand_to_remove = []
     for year in years:
         for make in makes:
             #Get all models for each make
@@ -68,10 +87,7 @@ def updateModels():
 
                 #Skip if no models or less then 5  models found for make
                 if (model_response.json()["Count"] == 0 or model_response.json()["Count"] < 5):
-                    sql = """DELETE FROM diag_app_brand WHERE name='{}';""".format(make[1])
-                    print("delete", sql)
-                    cur.execute(sql)
-                    conn.commit()
+                    brand_to_remove.append(make[1])
                     continue
 
                 #Terminal output
@@ -99,7 +115,11 @@ def updateModels():
                     cur.execute(sql)
                 except psycopg2.Error as e:
                     print(e.pgerror)
-                conn.commit() 
+                conn.commit()
+
+    #Remove any brands that don't have models in the DB
+    cleanUpBrands(brand_to_remove)
+    
 
 def updateMakes():
     ###Retrieve makes and store them in the DB###
