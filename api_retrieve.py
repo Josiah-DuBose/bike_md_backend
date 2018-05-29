@@ -4,8 +4,8 @@ import psycopg2
 import re
 
 ###
-# Retrieve all brands and models from https://vpic.nhtsa.dot.gov/api/
-# and insert in the database. Will delete any brands that do not currently 
+# Retrieve all brands and models from http://vpic.nhtsa.dot.gov/api/
+# and insert in the database. After insert will delete any brands that do not currently 
 # have models, or do no meet the name requirements.
 ###
 
@@ -45,16 +45,22 @@ def tableCleanUp(name):
     conn.commit()
 
 
-def cleanUpBrands(makes):
+def cleanUpBrands():
     #DB connect and cursor creation
     conn, cur = dbConnect()
-
+    cur.execute("""SELECT * FROM diag_app_brand;""")
+    makes = cur.fetchall()
     #Remove unneeded brands from DB.
     for make in makes:
-        sql = """DELETE FROM diag_app_brand WHERE name='{}';""".format(make)
-        print("delete", sql)
-        cur.execute(sql)
-        conn.commit()
+        select = """SELECT * FROM diag_app_model WHERE brand_id='{}'""".format(make[0])
+        cur.execute(select)
+        count = len(cur.fetchall())
+        print("{} records found for {}".format(count, make[1]))
+        if (count == 0):  
+            sql = """DELETE FROM diag_app_brand WHERE id='{}';""".format(make[0])
+            print("deleting... ", make[1])
+            cur.execute(sql)
+            conn.commit()
 
 
 def updateModels():
@@ -75,19 +81,17 @@ def updateModels():
     makes = cur.fetchall()
 
     baseURL = getURL("models")
-    brand_to_remove = []
     for year in years:
         for make in makes:
             #Get all models for each make
             models = []
             try:
-                #Build URL and make request 
+                #Build URL and make requestfor current models
                 url = "{}/{}/modelyear/{}?format=json".format(baseURL,make[1],year[1])
                 model_response = requests.get(url)
 
                 #Skip if no models or less then 5  models found for make
                 if (model_response.json()["Count"] == 0 or model_response.json()["Count"] < 5):
-                    brand_to_remove.append(make[1])
                     continue
 
                 #Terminal output
@@ -117,8 +121,7 @@ def updateModels():
                     print(e.pgerror)
                 conn.commit()
 
-    #Remove any brands that don't have models in the DB
-    cleanUpBrands(brand_to_remove)
+    
     
 
 def updateMakes():
@@ -171,6 +174,8 @@ def updateMakes():
 
 def main():
     updateMakes()
+    #Remove any brands that don't have models in the DB
+    cleanUpBrands()
 
 if __name__ == "__main__":
     main()
