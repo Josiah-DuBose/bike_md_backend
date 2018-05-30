@@ -22,7 +22,7 @@ router.register(r'years', views.YearViewSet)
 
 
 urlpatterns = [
-    url(r'^api/', include(router.urls)),
+    url(r'^api/v1/', include(router.urls)),
     url(r'^api-token-refresh/', refresh_jwt_token),
     url(r'^api-token-auth/', obtain_jwt_token),
 ]
