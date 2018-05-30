@@ -29,11 +29,17 @@ class Tech(models.Model):
 
 class Brand(models.Model):
     name = models.CharField(max_length=40)
-    make_id = models.CharField(max_length=40)
+    make_id = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.name)
 
 
 class Year(models.Model):
     value = models.CharField(max_length=4)
+
+    def __str__(self):
+        return str(self.value)
 
 
 class Model(models.Model):
@@ -41,10 +47,11 @@ class Model(models.Model):
     brand = models.ForeignKey(Brand)
     year = models.ForeignKey(Year)
 
+
     class JSONAPIMeta:
         resource_name = "models"
 
-    def __repr__(self):
+    def __str__(self):
         return str(self.name)
 
 
@@ -57,8 +64,13 @@ class Problem(models.Model):
     posted = models.DateTimeField(auto_now=True)
     mileage = models.IntegerField(default=0)
 
+    def __str__(self):
+        return str(self.title)
+
     class JSONAPIMeta:
         resource_name = "problems"
+
+
 
 
 class Solution(models.Model):

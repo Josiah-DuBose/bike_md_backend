@@ -75,7 +75,7 @@ class BrandSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Brand
-        fields = ['id', 'value']
+        fields = ['id', 'name', 'make_id']
 
 
 class YearSerializer(serializers.ModelSerializer):
