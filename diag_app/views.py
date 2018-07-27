@@ -31,7 +31,7 @@ class ModelViewSet(viewsets.ModelViewSet):
 
 
 class YearViewSet(viewsets.ModelViewSet):
-    queryset = Year.objects.all().order_by('value')
+    queryset = Year.objects.all().order_by('-value')
     serializer_class = YearSerializer
 
 
